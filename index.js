@@ -132,7 +132,6 @@ const row = new ActionRowBuilder().addComponents(closeButton, addUserButton, rem
 
 // Ticket kapatma fonksiyonu
     async function closeTicket(channel, closedBy) {
-        const channel = interaction.channel;
     
     if (!channel.name.startsWith('ticket-')) {
         return interaction.reply({ content: '❌ Bu komut sadece ticket kanallarında kullanılabilir!', ephemeral: true });
@@ -142,14 +141,14 @@ const row = new ActionRowBuilder().addComponents(closeButton, addUserButton, rem
     
     // Transcript oluştur
 await createTranscript(channel, closedBy);
-    
+
     setTimeout(async () => {
         await channel.delete();
     }, 3000);
 }
 
 // Transcript oluşturma fonksiyonu
-async function createTranscript(channel) {
+    async function createTranscript(channel, closedBy) {
         const transcriptsDir = path.join(__dirname, 'transcripts');
     if (!fs.existsSync(transcriptsDir)) {
         fs.mkdirSync(transcriptsDir, { recursive: true });
@@ -346,7 +345,7 @@ async function createTranscript(channel) {
                 .setTitle('🔒 Ticket Kapatıldı')
                 .addFields(
                     { name: '📋 Ticket', value: channel.name, inline: true },
-                    { name: '👤 Kapatan', value: `<@${channel.lastMessage?.author?.id || 'Bilinmiyor'}>`, inline: true },
+                    { name: '👤 Kapatan', value: `<@${closedBy?.id || 'Bilinmiyor'}>`, inline: true },
                     { name: '📅 Tarih', value: new Date().toLocaleString('tr-TR'), inline: false }
                 )
                 .setTimestamp();

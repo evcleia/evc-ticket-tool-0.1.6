@@ -54,9 +54,10 @@ client.on(Events.InteractionCreate, async interaction => {
 if (interaction.isButton()) {
     if (interaction.customId === 'create_ticket') {
         await createTicket(interaction);
-    if (interaction.customId === 'close_ticket') {
+if (interaction.customId === 'close_ticket') {
     await interaction.reply({ content: '🔒 Ticket kapatılıyor...', ephemeral: true });
-    await closeTicket(interaction.channel, interaction.user); // ← user parametresi ekledik!
+    await closeTicket(interaction.channel, interaction.user);
+}
 }    } else if (interaction.customId === 'add_user') {
         await addUser(interaction);
     } else if (interaction.customId === 'remove_user') {

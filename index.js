@@ -54,9 +54,10 @@ client.on(Events.InteractionCreate, async interaction => {
 if (interaction.isButton()) {
     if (interaction.customId === 'create_ticket') {
         await createTicket(interaction);
-    } else if (interaction.customId === 'close_ticket') {
-        await closeTicket(interaction);
-    } else if (interaction.customId === 'add_user') {
+    if (interaction.customId === 'close_ticket') {
+    await interaction.reply({ content: '🔒 Ticket kapatılıyor...', ephemeral: true });
+    await closeTicket(interaction.channel, interaction.user); // ← user parametresi ekledik!
+}    } else if (interaction.customId === 'add_user') {
         await addUser(interaction);
     } else if (interaction.customId === 'remove_user') {
         await removeUser(interaction);
@@ -130,8 +131,8 @@ const row = new ActionRowBuilder().addComponents(closeButton, addUserButton, rem
 }
 
 // Ticket kapatma fonksiyonu
-async function closeTicket(interaction) {
-    const channel = interaction.channel;
+    async function closeTicket(channel, closedBy) {
+        const channel = interaction.channel;
     
     if (!channel.name.startsWith('ticket-')) {
         return interaction.reply({ content: '❌ Bu komut sadece ticket kanallarında kullanılabilir!', ephemeral: true });
@@ -140,7 +141,7 @@ async function closeTicket(interaction) {
     await interaction.reply('🔒 Ticket kapatılıyor... Transcript oluşturuluyor...');
     
     // Transcript oluştur
-    await createTranscript(channel);
+await createTranscript(channel, closedBy);
     
     setTimeout(async () => {
         await channel.delete();

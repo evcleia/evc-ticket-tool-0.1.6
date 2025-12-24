@@ -29,6 +29,6 @@ app.get('/list', (req, res) => {
     res.send(`<h1>📄 Transcript Listesi</h1>${links || 'Henüz transcript yok.'}`);
 });
 
-app.listen(PORT, () => {
-    console.log(`🌐 Web sunucu çalışıyor: http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🌐 Web sunucu PORT ${PORT} üzerinde çalışıyor`);
 });

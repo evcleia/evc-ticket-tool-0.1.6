@@ -149,6 +149,10 @@ async function closeTicket(interaction) {
 
 // Transcript oluşturma fonksiyonu
 async function createTranscript(channel) {
+        const transcriptsDir = path.join(__dirname, 'transcripts');
+    if (!fs.existsSync(transcriptsDir)) {
+        fs.mkdirSync(transcriptsDir, { recursive: true });
+    }
     try {
         // Tüm mesajları çek
         const messages = await channel.messages.fetch({ limit: 100 });

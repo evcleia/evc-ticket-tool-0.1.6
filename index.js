@@ -351,7 +351,7 @@ async function createTranscript(channel) {
             });
         }
         // Railway URL'ini al (.env'den veya localhost)
-const serverURL = process.env.RAILWAY_URL || 'http://localhost:3000';
+const serverURL = process.env.RAILWAY_URL || 'https://evc-bot-pbu.up.railway.app/';
 const transcriptURL = `${serverURL}/transcripts/${fileName}`;
 
 const updatedEmbed = new EmbedBuilder()

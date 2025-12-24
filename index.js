@@ -334,7 +334,8 @@ async function createTranscript(channel) {
         fs.mkdirSync(transcriptsDir);
     }
 
-        const filePath = path.join(transcriptsDir, fileName);        
+        const filePath = path.join(transcriptsDir, fileName);
+        fs.writeFileSync(filePath, html);        
         // Log kanalına gönder
         const logChannel = channel.guild.channels.cache.get(process.env.LOG_CHANNEL_ID);
         
@@ -348,12 +349,7 @@ async function createTranscript(channel) {
                     { name: '📅 Tarih', value: new Date().toLocaleString('tr-TR'), inline: false }
                 )
                 .setTimestamp();
-            
-            await logChannel.send({ 
-                embeds: [logEmbed],
-                files: [{ attachment: filePath, name: fileName }]
-            });
-        }
+                }
         // Railway URL'ini al (.env'den veya localhost)
 const serverURL = process.env.RAILWAY_URL || 'https://evc-bot-pbu.up.railway.app/';
 const transcriptURL = `${serverURL}/transcripts/${fileName}`;

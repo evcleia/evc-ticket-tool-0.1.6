@@ -1,4 +1,4 @@
-require('dotenv').config();
+// require('dotenv').config();
 require('./server.js');
 const { Client, GatewayIntentBits, Collection, Events, PermissionFlagsBits, ChannelType, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const fs = require('fs');
@@ -463,4 +463,6 @@ async function removeUser(interaction) {
         }
     });
 }
+
+console.log('TOKEN:', process.env.TOKEN ? 'Var' : 'YOK!');
 client.login(process.env.TOKEN);

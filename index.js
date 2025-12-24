@@ -64,7 +64,7 @@ if (interaction.customId === 'close_ticket') {
         await removeUser(interaction);
     }
 }
-});
+);
 
 // Ticket oluşturma fonksiyonu
 async function createTicket(interaction) {

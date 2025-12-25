@@ -51,20 +51,19 @@ client.on(Events.InteractionCreate, async interaction => {
     }
     
     // Buton tıklamalarını dinle
-if (interaction.isButton()) {
-    if (interaction.customId === 'create_ticket') {
-        await createTicket(interaction);
-if (interaction.customId === 'close_ticket') {
-    await interaction.reply({ content: '🔒 Ticket kapatılıyor...', ephemeral: true });
-    await closeTicket(interaction.channel, interaction.user);
-}
-}    } else if (interaction.customId === 'add_user') {
-        await addUser(interaction);
-    } else if (interaction.customId === 'remove_user') {
-        await removeUser(interaction);
+    if (interaction.isButton()) {
+        if (interaction.customId === 'create_ticket') {
+            await createTicket(interaction);
+        } else if (interaction.customId === 'close_ticket') {
+            await interaction.reply({ content: '🔒 Ticket kapatılıyor...', ephemeral: true });
+            await closeTicket(interaction.channel, interaction.user);
+        } else if (interaction.customId === 'add_user') {
+            await addUser(interaction);
+        } else if (interaction.customId === 'remove_user') {
+            await removeUser(interaction);
+        }
     }
-}
-);
+});
 
 // Ticket oluşturma fonksiyonu
 async function createTicket(interaction) {

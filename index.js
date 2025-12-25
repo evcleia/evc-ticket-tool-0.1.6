@@ -26,7 +26,7 @@ for (const file of commandFiles) {
     client.commands.set(command.data.name, command);
 }
 
-client.once('ready', async () => { // ← async ekleyin!
+client.once('ready', async () => {
     console.log(`✅ Bot hazır! ${client.user.tag} olarak giriş yapıldı`);
     
     // Komutları kaydet
@@ -85,13 +85,14 @@ async function createTicket(interaction) {
     }
     
     // Ticket kanalı oluştur
-ticketData.ticketCount++;
-fs.writeFileSync(ticketDataPath, JSON.stringify(ticketData, null, 2));
+    ticketData.ticketCount++;
+    fs.writeFileSync(ticketDataPath, JSON.stringify(ticketData, null, 2));
 
-const ticketNumber = String(ticketData.ticketCount).padStart(4, '0');
+    const ticketNumber = String(ticketData.ticketCount).padStart(4, '0');
 
-const ticketChannel = await guild.channels.create({
-    name: `ticket-${ticketNumber}`,        type: ChannelType.GuildText,
+    const ticketChannel = await guild.channels.create({
+        name: `ticket-${ticketNumber}`,
+        type: ChannelType.GuildText,
         parent: category.id,
         permissionOverwrites: [
             {
@@ -116,17 +117,17 @@ const ticketChannel = await guild.channels.create({
         .setLabel('🔒 Ticket\'ı Kapat')
         .setStyle(ButtonStyle.Danger);
 
-        const addUserButton = new ButtonBuilder()
-    .setCustomId('add_user')
-    .setLabel('➕ Kullanıcı Ekle')
-    .setStyle(ButtonStyle.Success);
+    const addUserButton = new ButtonBuilder()
+        .setCustomId('add_user')
+        .setLabel('➕ Kullanıcı Ekle')
+        .setStyle(ButtonStyle.Success);
 
-const removeUserButton = new ButtonBuilder()
-    .setCustomId('remove_user')
-    .setLabel('➖ Kullanıcı Çıkar')
-    .setStyle(ButtonStyle.Secondary);
+    const removeUserButton = new ButtonBuilder()
+        .setCustomId('remove_user')
+        .setLabel('➖ Kullanıcı Çıkar')
+        .setStyle(ButtonStyle.Secondary);
     
-const row = new ActionRowBuilder().addComponents(closeButton, addUserButton, removeUserButton);
+    const row = new ActionRowBuilder().addComponents(closeButton, addUserButton, removeUserButton);
     
     await ticketChannel.send({ embeds: [embed], components: [row] });
     await interaction.reply({ content: `Ticket'ınız oluşturuldu: ${ticketChannel}`, ephemeral: true });
@@ -152,7 +153,20 @@ async function closeTicket(channel, closedBy) {
         await channel.delete();
         console.log('✅ Kanal silindi!');
     }, 3000);
-}        
+}
+
+// Transcript oluşturma fonksiyonu
+async function createTranscript(channel, closedBy) {
+    const transcriptsDir = path.join(__dirname, 'transcripts');
+    if (!fs.existsSync(transcriptsDir)) {
+        fs.mkdirSync(transcriptsDir, { recursive: true });
+    }
+    
+    try {
+        // Tüm mesajları çek
+        const messages = await channel.messages.fetch({ limit: 100 });
+        const sortedMessages = Array.from(messages.values()).reverse();
+        
         // HTML oluştur
         let html = `
 <!DOCTYPE html>
@@ -322,37 +336,35 @@ async function closeTicket(channel, closedBy) {
         
         // HTML dosyasını kaydet
         const fileName = `transcript-${channel.name}-${Date.now()}.html`;
-        const transcriptsDir = path.join(__dirname, 'transcripts');
-
-        // Transcripts klasörünü oluştur (yoksa)
-        if (!fs.existsSync(transcriptsDir)) {
-        fs.mkdirSync(transcriptsDir);
-    }
-
         const filePath = path.join(transcriptsDir, fileName);
-        fs.writeFileSync(filePath, html);        
-// Log kanalına gönder
-const logChannel = channel.guild.channels.cache.get(process.env.LOG_CHANNEL_ID);
+        fs.writeFileSync(filePath, html);
+        
+        // Log kanalına gönder
+        const logChannel = channel.guild.channels.cache.get(process.env.LOG_CHANNEL_ID);
 
-if (logChannel) {
-    // Railway URL'ini al
-    const serverURL = process.env.RAILWAY_URL || 'https://evc-bot-pbu.up.railway.app';
-    const transcriptURL = `${serverURL}/transcripts/${fileName}`;
+        if (logChannel) {
+            // Railway URL'ini al
+            const serverURL = process.env.RAILWAY_URL || 'https://evc-bot-pbu.up.railway.app';
+            const transcriptURL = `${serverURL}/transcripts/${fileName}`;
 
-    const updatedEmbed = new EmbedBuilder()
-        .setColor('#ff0000')
-        .setTitle('🔒 Ticket Kapatıldı')
-        .addFields(
-            { name: '📋 Ticket', value: channel.name, inline: true },
-            { name: '👤 Kapatan', value: `<@${closedBy?.id || 'Bilinmiyor'}>`, inline: true },
-            { name: '📅 Tarih', value: new Date().toLocaleString('tr-TR'), inline: false },
-            { name: '🔗 Transcript Linki', value: `[Buraya tıkla](${transcriptURL})`, inline: false }
-        )
-        .setTimestamp();
+            const updatedEmbed = new EmbedBuilder()
+                .setColor('#ff0000')
+                .setTitle('🔒 Ticket Kapatıldı')
+                .addFields(
+                    { name: '📋 Ticket', value: channel.name, inline: true },
+                    { name: '👤 Kapatan', value: `<@${closedBy?.id || 'Bilinmiyor'}>`, inline: true },
+                    { name: '📅 Tarih', value: new Date().toLocaleString('tr-TR'), inline: false },
+                    { name: '🔗 Transcript Linki', value: `[Buraya tıkla](${transcriptURL})`, inline: false }
+                )
+                .setTimestamp();
 
-    await logChannel.send({ embeds: [updatedEmbed] });
-} else {
-    console.error('❌ Log kanalı bulunamadı!');
+            await logChannel.send({ embeds: [updatedEmbed] });
+        } else {
+            console.error('❌ Log kanalı bulunamadı!');
+        }
+    } catch (error) {
+        console.error('Transcript oluşturulurken hata:', error);
+    }
 }
 
 // Kullanıcı ekleme fonksiyonu

@@ -1,5 +1,4 @@
 // require('dotenv').config();
-require('./server.js');
 const { Client, GatewayIntentBits, Collection, Events, PermissionFlagsBits, ChannelType, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
@@ -27,14 +26,17 @@ for (const file of commandFiles) {
     client.commands.set(command.data.name, command);
 }
 
-client.once('ready', async () => {
+client.once('ready', () => {
     console.log(`✅ Bot hazır! ${client.user.tag} olarak giriş yapıldı`);
     
+    // Web sunucuyu başlat
+    require('./server.js');
+});    
     // Komutları Discord'a kaydet
     const commands = client.commands.map(cmd => cmd.data.toJSON());
     await client.application.commands.set(commands);
     console.log('✅ Komutlar kaydedildi!');
-});
+;
 
 // Slash komutlarını dinle
 client.on(Events.InteractionCreate, async interaction => {

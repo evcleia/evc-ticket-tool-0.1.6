@@ -1,9 +1,9 @@
 {
   "name": "ticket-controller",
   "version": "1.0.0",
+  "type": "commonjs",
   "description": "Ticket kontrol paneli, RP oyuncuları için geliştirildi.",
-  "main": "index.js",
-  "scripts": {
+  "main": "index.js",  "scripts": {
     "start": "node index.js"
   },
   "keywords": [

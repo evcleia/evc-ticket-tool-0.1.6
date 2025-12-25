@@ -131,33 +131,26 @@ const row = new ActionRowBuilder().addComponents(closeButton, addUserButton, rem
 }
 
 // Ticket kapatma fonksiyonu
-    async function closeTicket(channel, closedBy) {
+async function closeTicket(channel, closedBy) {
+    console.log('🔴 closeTicket çağrıldı!', channel.name, closedBy.tag);
     
     if (!channel.name.startsWith('ticket-')) {
-        return interaction.reply({ content: '❌ Bu komut sadece ticket kanallarında kullanılabilir!', ephemeral: true });
+        console.error('❌ Bu bir ticket kanalı değil!');
+        return;
     }
     
-    await interaction.reply('🔒 Ticket kapatılıyor... Transcript oluşturuluyor...');
+    console.log('✅ Ticket kontrolü geçti, transcript oluşturuluyor...');
     
     // Transcript oluştur
-await createTranscript(channel, closedBy);
+    await createTranscript(channel, closedBy);
+    
+    console.log('✅ Transcript oluşturuldu, kanal siliniyor...');
 
     setTimeout(async () => {
         await channel.delete();
+        console.log('✅ Kanal silindi!');
     }, 3000);
-}
-
-// Transcript oluşturma fonksiyonu
-    async function createTranscript(channel, closedBy) {
-        const transcriptsDir = path.join(__dirname, 'transcripts');
-    if (!fs.existsSync(transcriptsDir)) {
-        fs.mkdirSync(transcriptsDir, { recursive: true });
-    }
-    try {
-        // Tüm mesajları çek
-        const messages = await channel.messages.fetch({ limit: 100 });
-        const sortedMessages = Array.from(messages.values()).reverse();
-        
+}        
         // HTML oluştur
         let html = `
 <!DOCTYPE html>
@@ -336,40 +329,28 @@ await createTranscript(channel, closedBy);
 
         const filePath = path.join(transcriptsDir, fileName);
         fs.writeFileSync(filePath, html);        
-        // Log kanalına gönder
-        const logChannel = channel.guild.channels.cache.get(process.env.LOG_CHANNEL_ID);
-        
-        if (logChannel) {
-            const logEmbed = new EmbedBuilder()
-                .setColor('#ff0000')
-                .setTitle('🔒 Ticket Kapatıldı')
-                .addFields(
-                    { name: '📋 Ticket', value: channel.name, inline: true },
-                    { name: '👤 Kapatan', value: `<@${closedBy?.id || 'Bilinmiyor'}>`, inline: true },
-                    { name: '📅 Tarih', value: new Date().toLocaleString('tr-TR'), inline: false }
-                )
-                .setTimestamp();
-                }
-        // Railway URL'ini al (.env'den veya localhost)
-const serverURL = process.env.RAILWAY_URL || 'https://evc-bot-pbu.up.railway.app';
-const transcriptURL = `${serverURL}/transcripts/${fileName}`;
+// Log kanalına gönder
+const logChannel = channel.guild.channels.cache.get(process.env.LOG_CHANNEL_ID);
 
-const updatedEmbed = new EmbedBuilder()
-    .setColor('#ff0000')
-    .setTitle('🔒 Ticket Kapatıldı')
-    .addFields(
-        { name: '📋 Ticket', value: channel.name, inline: true },
-        { name: '👤 Kapatan', value: `<@${channel.lastMessage?.author?.id || 'Bilinmiyor'}>`, inline: true },
-        { name: '📅 Tarih', value: new Date().toLocaleString('tr-TR'), inline: false },
-        { name: '🔗 Transcript Linki', value: `[Buraya tıkla](${transcriptURL})`, inline: false }
-    )
-    .setTimestamp();
+if (logChannel) {
+    // Railway URL'ini al
+    const serverURL = process.env.RAILWAY_URL || 'https://evc-bot-pbu.up.railway.app';
+    const transcriptURL = `${serverURL}/transcripts/${fileName}`;
 
-await logChannel.send({ embeds: [updatedEmbed] });
-                
-    } catch (error) {
-        console.error('Transcript oluşturulurken hata:', error);
-    }
+    const updatedEmbed = new EmbedBuilder()
+        .setColor('#ff0000')
+        .setTitle('🔒 Ticket Kapatıldı')
+        .addFields(
+            { name: '📋 Ticket', value: channel.name, inline: true },
+            { name: '👤 Kapatan', value: `<@${closedBy?.id || 'Bilinmiyor'}>`, inline: true },
+            { name: '📅 Tarih', value: new Date().toLocaleString('tr-TR'), inline: false },
+            { name: '🔗 Transcript Linki', value: `[Buraya tıkla](${transcriptURL})`, inline: false }
+        )
+        .setTimestamp();
+
+    await logChannel.send({ embeds: [updatedEmbed] });
+} else {
+    console.error('❌ Log kanalı bulunamadı!');
 }
 
 // Kullanıcı ekleme fonksiyonu

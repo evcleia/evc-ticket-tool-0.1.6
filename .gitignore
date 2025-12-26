@@ -1,4 +1,29 @@
-node_modules/
+# Ortam değişkenleri (ÇOK ÖNEMLİ!)
 .env
-.DS_Store
+.env.local
+.env.production
+
+# Node modülleri
+node_modules/
+
+# Transcript dosyaları
 transcripts/
+
+# Veritabanı dosyaları
+*.sqlite
+*.db
+
+# Log dosyaları
+*.log
+logs/
+
+# Ticket verileri
+ticketData.json
+
+# IDE ayarları
+.vscode/
+.idea/
+
+# Sistem dosyaları
+.DS_Store
+Thumbs.db

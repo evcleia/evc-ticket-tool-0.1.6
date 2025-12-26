@@ -73,6 +73,7 @@ client.on(Events.InteractionCreate, async interaction => {
 });
 
 // Ticket oluşturma fonksiyonu
+// Ticket oluşturma fonksiyonu
 async function createTicket(interaction) {
     const guild = interaction.guild;
     const member = interaction.member;
@@ -125,6 +126,11 @@ async function createTicket(interaction) {
         .setTitle('🎫 Ticket Oluşturuldu')
         .setDescription(messageWithUser)
         .setTimestamp();
+    
+    // Embed görseli varsa ekle
+    if (settings.embed_image_url) {
+        embed.setImage(settings.embed_image_url);
+    }
     
     const closeButton = new ButtonBuilder()
         .setCustomId('close_ticket')

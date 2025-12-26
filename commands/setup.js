@@ -39,11 +39,28 @@ module.exports = {
             .setFooter({ text: 'Ticket sistemi aktif' })
             .setTimestamp();
         
+        // Embed görseli varsa ekle
+        if (settings?.embed_image_url) {
+            embed.setImage(settings.embed_image_url);
+        }
+        
+        // Buton rengi map
+        const buttonStyleMap = {
+            'Primary': ButtonStyle.Primary,
+            'Success': ButtonStyle.Success,
+            'Danger': ButtonStyle.Danger,
+            'Secondary': ButtonStyle.Secondary
+        };
+        
+        const buttonStyle = buttonStyleMap[settings?.button_color] || ButtonStyle.Primary;
+        const buttonEmoji = settings?.button_emoji || '🎫';
+        const buttonText = settings?.button_text || 'Ticket Aç';
+        
         // Buton oluştur
         const button = new ButtonBuilder()
             .setCustomId('create_ticket')
-            .setLabel(settings?.button_text || '🎫 Ticket Aç')
-            .setStyle(ButtonStyle.Primary);
+            .setLabel(`${buttonEmoji} ${buttonText}`)
+            .setStyle(buttonStyle);
         
         const row = new ActionRowBuilder().addComponents(button);
         

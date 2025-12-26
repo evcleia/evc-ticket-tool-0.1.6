@@ -254,7 +254,7 @@ router.get('/', isAuthenticated, async (req, res) => {
                         <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png" class="avatar">
                         <div class="user-details">
                             <h2>${user.username}</h2>
-                            <p>evc Bot Paneli</p>
+                            <p>👋 Hoş geldin!</p>
                         </div>
                     </div>
                     <a href="/auth/logout" class="logout-btn">Çıkış Yap</a>
@@ -518,8 +518,35 @@ router.get('/:guildId', isAuthenticated, async (req, res) => {
                         <label>Embed Rengi:</label>
                         <input type="color" name="embed_color" value="${settings?.embed_color || '#0099ff'}">
                         
+                        <label>Embed Görseli (URL - Opsiyonel):</label>
+                        <input type="url" name="embed_image_url" value="${settings?.embed_image_url || ''}" placeholder="https://example.com/image.png">
+                        <small>💡 Embed içinde görünecek resim linki</small>
+                        
+                        <label>Buton Emoji:</label>
+                        <input type="text" name="button_emoji" value="${settings?.button_emoji || '🎫'}" maxlength="2" placeholder="🎫">
+                        <small>💡 Butonun başında görünecek emoji</small>
+                        
                         <label>Buton Yazısı:</label>
-                        <input type="text" name="button_text" value="${settings?.button_text || '🎫 Ticket Aç'}" required>
+                        <input type="text" name="button_text" value="${settings?.button_text || 'Ticket Aç'}" required>
+                        
+                        <label>Buton Rengi:</label>
+                        <select name="button_color" style="
+                            width: 100%;
+                            padding: 14px;
+                            margin-bottom: 18px;
+                            background: rgba(10, 14, 39, 0.8);
+                            border: 1px solid rgba(212, 175, 55, 0.2);
+                            border-radius: 10px;
+                            font-family: inherit;
+                            color: #e4e4e7;
+                            font-size: 15px;
+                            cursor: pointer;
+                        ">
+                            <option value="Primary" ${(settings?.button_color || 'Primary') === 'Primary' ? 'selected' : ''}>🔵 Mavi (Primary)</option>
+                            <option value="Success" ${settings?.button_color === 'Success' ? 'selected' : ''}>🟢 Yeşil (Success)</option>
+                            <option value="Danger" ${settings?.button_color === 'Danger' ? 'selected' : ''}>🔴 Kırmızı (Danger)</option>
+                            <option value="Secondary" ${settings?.button_color === 'Secondary' ? 'selected' : ''}>⚫ Gri (Secondary)</option>
+                        </select>
                     </div>
                     
                     <div class="section">
@@ -572,7 +599,8 @@ router.get('/:guildId/transcripts', isAuthenticated, async (req, res) => {
     }
     
     // Transcripts klasörünü oku
-const transcriptsDir = process.env.RAILWAY_VOLUME_MOUNT_PATH || path.join(__dirname, '..', 'transcripts');    let transcripts = [];
+    const transcriptsDir = path.join(__dirname, '..', 'transcripts');
+    let transcripts = [];
     
     if (fs.existsSync(transcriptsDir)) {
         const files = fs.readdirSync(transcriptsDir);

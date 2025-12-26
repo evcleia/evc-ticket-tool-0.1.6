@@ -20,12 +20,24 @@ async function initDatabase() {
                 embed_title TEXT DEFAULT '🎫 Destek Talebi Oluştur',
                 embed_description TEXT DEFAULT 'Destek ekibimizle iletişime geçmek için aşağıdaki butona tıklayın.',
                 embed_color TEXT DEFAULT '#0099ff',
+                embed_image_url TEXT,
                 button_text TEXT DEFAULT '🎫 Ticket Aç',
+                button_color TEXT DEFAULT 'Primary',
+                button_emoji TEXT DEFAULT '🎫',
                 welcome_message TEXT DEFAULT 'Merhaba {user}, destek ekibimiz en kısa sürede size yardımcı olacak!',
                 close_message TEXT DEFAULT 'Ticket kapatılıyor... Desteğimiz için teşekkürler!',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         `);
+        
+        // Eski tablolara yeni sütunları ekle
+        await client.query(`
+            ALTER TABLE guilds 
+            ADD COLUMN IF NOT EXISTS embed_image_url TEXT,
+            ADD COLUMN IF NOT EXISTS button_color TEXT DEFAULT 'Primary',
+            ADD COLUMN IF NOT EXISTS button_emoji TEXT DEFAULT '🎫'
+        `);
+        
         console.log('✅ Database tablosu hazır!');
     } catch (error) {
         console.error('❌ Database hatası:', error);
@@ -91,15 +103,21 @@ async function saveEmbedSettings(guildId, settings) {
             SET embed_title = $1,
                 embed_description = $2,
                 embed_color = $3,
-                button_text = $4,
-                welcome_message = $5,
-                close_message = $6
-            WHERE guild_id = $7
+                embed_image_url = $4,
+                button_text = $5,
+                button_color = $6,
+                button_emoji = $7,
+                welcome_message = $8,
+                close_message = $9
+            WHERE guild_id = $10
         `, [
             settings.embed_title,
             settings.embed_description,
             settings.embed_color,
+            settings.embed_image_url,
             settings.button_text,
+            settings.button_color,
+            settings.button_emoji,
             settings.welcome_message,
             settings.close_message,
             guildId

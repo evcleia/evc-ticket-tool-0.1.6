@@ -572,8 +572,7 @@ router.get('/:guildId/transcripts', isAuthenticated, async (req, res) => {
     }
     
     // Transcripts klasörünü oku
-    const transcriptsDir = path.join(__dirname, '..', 'transcripts');
-    let transcripts = [];
+const transcriptsDir = process.env.RAILWAY_VOLUME_MOUNT_PATH || path.join(__dirname, '..', 'transcripts');    let transcripts = [];
     
     if (fs.existsSync(transcriptsDir)) {
         const files = fs.readdirSync(transcriptsDir);

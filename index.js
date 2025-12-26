@@ -171,8 +171,7 @@ async function closeTicket(channel, closedBy) {
 
 // Transcript oluşturma fonksiyonu
 async function createTranscript(channel, closedBy) {
-    const transcriptsDir = path.join(__dirname, 'transcripts');
-    if (!fs.existsSync(transcriptsDir)) {
+const transcriptsDir = process.env.RAILWAY_VOLUME_MOUNT_PATH || path.join(__dirname, 'transcripts');    if (!fs.existsSync(transcriptsDir)) {
         fs.mkdirSync(transcriptsDir, { recursive: true });
     }
     

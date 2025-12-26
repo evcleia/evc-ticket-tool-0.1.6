@@ -31,7 +31,7 @@ router.get('/', isAuthenticated, async (req, res) => {
                 
                 body {
                     font-family: 'Inter', sans-serif;
-                    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+                    background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0d1117 100%);
                     color: #e4e4e7;
                     min-height: 100vh;
                     padding: 20px;
@@ -49,16 +49,16 @@ router.get('/', isAuthenticated, async (req, res) => {
                 }
                 
                 .header {
-                    background: rgba(255, 255, 255, 0.05);
+                    background: rgba(10, 14, 39, 0.7);
                     backdrop-filter: blur(20px);
                     padding: 25px 30px;
                     border-radius: 20px;
-                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border: 1px solid rgba(212, 175, 55, 0.2);
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                     margin-bottom: 40px;
-                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
                 }
                 
                 .user-info {
@@ -71,8 +71,8 @@ router.get('/', isAuthenticated, async (req, res) => {
                     width: 60px;
                     height: 60px;
                     border-radius: 50%;
-                    border: 3px solid #5865f2;
-                    box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
+                    border: 3px solid #d4af37;
+                    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
                     transition: transform 0.3s ease;
                 }
                 
@@ -83,7 +83,7 @@ router.get('/', isAuthenticated, async (req, res) => {
                 .user-details h2 {
                     font-size: 24px;
                     font-weight: 700;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    background: linear-gradient(135deg, #d4af37 0%, #f4e5a1 100%);
                     -webkit-background-clip: text;
                     -webkit-text-fill-color: transparent;
                 }
@@ -95,7 +95,7 @@ router.get('/', isAuthenticated, async (req, res) => {
                 }
                 
                 .logout-btn {
-                    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                    background: linear-gradient(135deg, #8b0000 0%, #dc143c 100%);
                     color: white;
                     padding: 12px 28px;
                     border: none;
@@ -104,18 +104,18 @@ router.get('/', isAuthenticated, async (req, res) => {
                     text-decoration: none;
                     font-weight: 600;
                     transition: all 0.3s ease;
-                    box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+                    box-shadow: 0 4px 15px rgba(139, 0, 0, 0.4);
                 }
                 
                 .logout-btn:hover {
                     transform: translateY(-2px);
-                    box-shadow: 0 6px 20px rgba(245, 87, 108, 0.6);
+                    box-shadow: 0 6px 20px rgba(139, 0, 0, 0.6);
                 }
                 
                 .page-title {
                     font-size: 48px;
                     font-weight: 800;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    background: linear-gradient(135deg, #1e3a8a 0%, #d4af37 100%);
                     -webkit-background-clip: text;
                     -webkit-text-fill-color: transparent;
                     text-align: center;
@@ -130,24 +130,24 @@ router.get('/', isAuthenticated, async (req, res) => {
                 }
                 
                 .stat-card {
-                    background: rgba(255, 255, 255, 0.05);
+                    background: rgba(10, 14, 39, 0.6);
                     backdrop-filter: blur(10px);
                     padding: 25px;
                     border-radius: 16px;
-                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border: 1px solid rgba(212, 175, 55, 0.2);
                     text-align: center;
                     transition: all 0.3s ease;
                 }
                 
                 .stat-card:hover {
                     transform: translateY(-5px);
-                    border-color: rgba(102, 126, 234, 0.5);
+                    border-color: rgba(212, 175, 55, 0.5);
                 }
                 
                 .stat-number {
                     font-size: 36px;
                     font-weight: 800;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    background: linear-gradient(135deg, #d4af37 0%, #f4e5a1 100%);
                     -webkit-background-clip: text;
                     -webkit-text-fill-color: transparent;
                 }
@@ -166,9 +166,9 @@ router.get('/', isAuthenticated, async (req, res) => {
                 }
                 
                 .guild-card {
-                    background: rgba(255, 255, 255, 0.05);
+                    background: rgba(10, 14, 39, 0.6);
                     backdrop-filter: blur(20px);
-                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border: 1px solid rgba(212, 175, 55, 0.15);
                     padding: 30px;
                     border-radius: 20px;
                     text-align: center;
@@ -184,7 +184,7 @@ router.get('/', isAuthenticated, async (req, res) => {
                     left: 0;
                     right: 0;
                     height: 4px;
-                    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+                    background: linear-gradient(90deg, #1e3a8a 0%, #d4af37 100%);
                     transform: scaleX(0);
                     transition: transform 0.3s ease;
                 }
@@ -195,8 +195,8 @@ router.get('/', isAuthenticated, async (req, res) => {
                 
                 .guild-card:hover {
                     transform: translateY(-10px);
-                    border-color: rgba(102, 126, 234, 0.5);
-                    box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+                    border-color: rgba(212, 175, 55, 0.5);
+                    box-shadow: 0 20px 40px rgba(30, 58, 138, 0.4);
                 }
                 
                 .guild-icon {
@@ -204,14 +204,14 @@ router.get('/', isAuthenticated, async (req, res) => {
                     height: 100px;
                     border-radius: 50%;
                     margin-bottom: 20px;
-                    border: 3px solid rgba(255, 255, 255, 0.1);
+                    border: 3px solid rgba(212, 175, 55, 0.3);
                     transition: all 0.3s ease;
                 }
                 
                 .guild-card:hover .guild-icon {
                     transform: scale(1.1);
-                    border-color: #5865f2;
-                    box-shadow: 0 0 30px rgba(88, 101, 242, 0.6);
+                    border-color: #d4af37;
+                    box-shadow: 0 0 30px rgba(212, 175, 55, 0.6);
                 }
                 
                 .guild-name {
@@ -222,7 +222,7 @@ router.get('/', isAuthenticated, async (req, res) => {
                 }
                 
                 .manage-btn {
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
                     color: white;
                     padding: 12px 30px;
                     border: none;
@@ -232,12 +232,13 @@ router.get('/', isAuthenticated, async (req, res) => {
                     display: inline-block;
                     font-weight: 600;
                     transition: all 0.3s ease;
-                    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+                    box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4);
+                    border: 1px solid rgba(212, 175, 55, 0.2);
                 }
                 
                 .manage-btn:hover {
                     transform: translateY(-2px);
-                    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+                    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
                 }
                 
                 @media (max-width: 768px) {
@@ -319,7 +320,7 @@ router.get('/:guildId', isAuthenticated, async (req, res) => {
                 
                 body {
                     font-family: 'Inter', sans-serif;
-                    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+                    background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0d1117 100%);
                     color: #e4e4e7;
                     min-height: 100vh;
                     padding: 20px;
@@ -337,33 +338,33 @@ router.get('/:guildId', isAuthenticated, async (req, res) => {
                 }
                 
                 .back-btn {
-                    background: rgba(255, 255, 255, 0.1);
-                    color: #e4e4e7;
+                    background: rgba(10, 14, 39, 0.6);
+                    color: #d4af37;
                     padding: 12px 24px;
                     text-decoration: none;
                     border-radius: 12px;
                     display: inline-block;
                     margin-bottom: 30px;
                     transition: all 0.3s ease;
-                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border: 1px solid rgba(212, 175, 55, 0.3);
                 }
                 
                 .back-btn:hover {
-                    background: rgba(255, 255, 255, 0.15);
+                    background: rgba(10, 14, 39, 0.8);
                     transform: translateX(-5px);
                 }
                 
                 h1 {
                     font-size: 36px;
                     font-weight: 800;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    background: linear-gradient(135deg, #1e3a8a 0%, #d4af37 100%);
                     -webkit-background-clip: text;
                     -webkit-text-fill-color: transparent;
                     margin-bottom: 30px;
                 }
                 
                 .success-alert {
-                    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+                    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
                     color: white;
                     padding: 18px 24px;
                     border-radius: 12px;
@@ -372,8 +373,9 @@ router.get('/:guildId', isAuthenticated, async (req, res) => {
                     align-items: center;
                     gap: 10px;
                     font-weight: 600;
-                    box-shadow: 0 4px 15px rgba(17, 153, 142, 0.4);
+                    box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4);
                     animation: slideIn 0.3s ease;
+                    border: 1px solid rgba(212, 175, 55, 0.3);
                 }
                 
                 @keyframes slideIn {
@@ -382,9 +384,9 @@ router.get('/:guildId', isAuthenticated, async (req, res) => {
                 }
                 
                 .section {
-                    background: rgba(255, 255, 255, 0.05);
+                    background: rgba(10, 14, 39, 0.6);
                     backdrop-filter: blur(20px);
-                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border: 1px solid rgba(212, 175, 55, 0.2);
                     padding: 30px;
                     border-radius: 20px;
                     margin-bottom: 25px;
@@ -392,14 +394,14 @@ router.get('/:guildId', isAuthenticated, async (req, res) => {
                 }
                 
                 .section:hover {
-                    border-color: rgba(102, 126, 234, 0.3);
-                    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+                    border-color: rgba(212, 175, 55, 0.4);
+                    box-shadow: 0 8px 25px rgba(30, 58, 138, 0.3);
                 }
                 
                 .section h2 {
                     font-size: 22px;
                     font-weight: 700;
-                    color: #fff;
+                    color: #d4af37;
                     margin-bottom: 20px;
                     display: flex;
                     align-items: center;
@@ -418,8 +420,8 @@ router.get('/:guildId', isAuthenticated, async (req, res) => {
                     width: 100%;
                     padding: 14px;
                     margin-bottom: 18px;
-                    background: rgba(0, 0, 0, 0.3);
-                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    background: rgba(10, 14, 39, 0.8);
+                    border: 1px solid rgba(212, 175, 55, 0.2);
                     border-radius: 10px;
                     font-family: inherit;
                     color: #e4e4e7;
@@ -429,9 +431,9 @@ router.get('/:guildId', isAuthenticated, async (req, res) => {
                 
                 input:focus, textarea:focus {
                     outline: none;
-                    border-color: #5865f2;
-                    background: rgba(0, 0, 0, 0.4);
-                    box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.1);
+                    border-color: #d4af37;
+                    background: rgba(10, 14, 39, 0.9);
+                    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
                 }
                 
                 textarea {
@@ -445,22 +447,22 @@ router.get('/:guildId', isAuthenticated, async (req, res) => {
                 }
                 
                 .save-btn {
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
                     color: white;
                     padding: 16px 40px;
-                    border: none;
+                    border: 1px solid rgba(212, 175, 55, 0.3);
                     border-radius: 12px;
                     cursor: pointer;
                     font-size: 16px;
                     font-weight: 700;
                     transition: all 0.3s ease;
-                    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+                    box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4);
                     width: 100%;
                 }
                 
                 .save-btn:hover {
                     transform: translateY(-2px);
-                    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+                    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
                 }
                 
                 small {
@@ -472,10 +474,10 @@ router.get('/:guildId', isAuthenticated, async (req, res) => {
                 }
                 
                 .preview-box {
-                    background: rgba(0, 0, 0, 0.3);
+                    background: rgba(10, 14, 39, 0.5);
                     padding: 20px;
                     border-radius: 12px;
-                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border: 1px solid rgba(212, 175, 55, 0.2);
                     margin-top: 15px;
                 }
                 

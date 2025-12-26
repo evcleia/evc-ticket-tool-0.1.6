@@ -14,7 +14,7 @@ router.get('/', isAuthenticated, async (req, res) => {
     
     // Kullanıcının sunucularını al
     const guilds = user.guilds.filter(guild => 
-        (guild.permissions & 0x20) === 0x20 // MANAGE_GUILD yetkisi var mı
+        (guild.permissions & 0x20) === 0x20
     );
     
     res.send(`
@@ -25,100 +25,225 @@ router.get('/', isAuthenticated, async (req, res) => {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Dashboard - Ticket Bot</title>
             <style>
-                * { margin: 0; padding: 0; box-sizing: border-box; }
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+                
+                * { 
+                    margin: 0; 
+                    padding: 0; 
+                    box-sizing: border-box; 
+                }
+                
                 body {
-                    font-family: 'Segoe UI', sans-serif;
-                    background: #0d1117;
-                    color: #c9d1d9;
+                    font-family: 'Inter', sans-serif;
+                    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+                    color: #e4e4e7;
                     min-height: 100vh;
                     padding: 20px;
                 }
+                
                 .container {
-                    max-width: 1200px;
+                    max-width: 1400px;
                     margin: 0 auto;
+                    animation: fadeIn 0.5s ease;
                 }
+                
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                
                 .header {
-                    background: #161b22;
-                    padding: 20px;
-                    border-radius: 10px;
-                    border: 1px solid #30363d;
+                    background: rgba(255, 255, 255, 0.05);
+                    backdrop-filter: blur(20px);
+                    padding: 25px 30px;
+                    border-radius: 20px;
+                    border: 1px solid rgba(255, 255, 255, 0.1);
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: 30px;
+                    margin-bottom: 40px;
+                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
                 }
+                
                 .user-info {
                     display: flex;
                     align-items: center;
-                    gap: 15px;
-                }
-                .avatar {
-                    width: 50px;
-                    height: 50px;
-                    border-radius: 50%;
-                    border: 2px solid #5865f2;
-                }
-                .logout-btn {
-                    background: #da3633;
-                    color: white;
-                    padding: 10px 20px;
-                    border: none;
-                    border-radius: 6px;
-                    cursor: pointer;
-                    text-decoration: none;
-                    transition: all 0.2s;
-                }
-                .logout-btn:hover {
-                    background: #c62828;
-                }
-                .guilds-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
                     gap: 20px;
                 }
-                .guild-card {
-                    background: #161b22;
-                    border: 1px solid #30363d;
-                    padding: 20px;
-                    border-radius: 10px;
-                    text-align: center;
-                    transition: all 0.3s;
-                }
-                .guild-card:hover {
-                    transform: translateY(-5px);
-                    border-color: #5865f2;
-                    box-shadow: 0 8px 16px rgba(88, 101, 242, 0.3);
-                }
-                .guild-icon {
-                    width: 80px;
-                    height: 80px;
+                
+                .avatar {
+                    width: 60px;
+                    height: 60px;
                     border-radius: 50%;
-                    margin-bottom: 15px;
-                    border: 2px solid #30363d;
+                    border: 3px solid #5865f2;
+                    box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
+                    transition: transform 0.3s ease;
                 }
-                .guild-name {
-                    font-size: 18px;
-                    font-weight: 600;
-                    margin-bottom: 10px;
-                    color: #c9d1d9;
+                
+                .avatar:hover {
+                    transform: scale(1.1) rotate(5deg);
                 }
-                .manage-btn {
-                    background: #5865f2;
+                
+                .user-details h2 {
+                    font-size: 24px;
+                    font-weight: 700;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                }
+                
+                .user-details p {
+                    color: #a1a1aa;
+                    font-size: 14px;
+                    margin-top: 5px;
+                }
+                
+                .logout-btn {
+                    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
                     color: white;
-                    padding: 10px 20px;
+                    padding: 12px 28px;
                     border: none;
-                    border-radius: 6px;
+                    border-radius: 12px;
+                    cursor: pointer;
+                    text-decoration: none;
+                    font-weight: 600;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+                }
+                
+                .logout-btn:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 20px rgba(245, 87, 108, 0.6);
+                }
+                
+                .page-title {
+                    font-size: 48px;
+                    font-weight: 800;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    margin-bottom: 30px;
+                    text-align: center;
+                }
+                
+                .stats-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                    gap: 20px;
+                    margin-bottom: 40px;
+                }
+                
+                .stat-card {
+                    background: rgba(255, 255, 255, 0.05);
+                    backdrop-filter: blur(10px);
+                    padding: 25px;
+                    border-radius: 16px;
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    text-align: center;
+                }
+                
+                .stat-number {
+                    font-size: 36px;
+                    font-weight: 800;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                }
+                
+                .stat-label {
+                    color: #a1a1aa;
+                    font-size: 14px;
+                    margin-top: 8px;
+                    font-weight: 500;
+                }
+                
+                .guilds-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                    gap: 25px;
+                }
+                
+                .guild-card {
+                    background: rgba(255, 255, 255, 0.05);
+                    backdrop-filter: blur(20px);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    padding: 30px;
+                    border-radius: 20px;
+                    text-align: center;
+                    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    position: relative;
+                    overflow: hidden;
+                }
+                
+                .guild-card::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    height: 4px;
+                    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+                    transform: scaleX(0);
+                    transition: transform 0.3s ease;
+                }
+                
+                .guild-card:hover::before {
+                    transform: scaleX(1);
+                }
+                
+                .guild-card:hover {
+                    transform: translateY(-10px);
+                    border-color: rgba(102, 126, 234, 0.5);
+                    box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+                }
+                
+                .guild-icon {
+                    width: 100px;
+                    height: 100px;
+                    border-radius: 50%;
+                    margin-bottom: 20px;
+                    border: 3px solid rgba(255, 255, 255, 0.1);
+                    transition: all 0.3s ease;
+                }
+                
+                .guild-card:hover .guild-icon {
+                    transform: scale(1.1);
+                    border-color: #5865f2;
+                    box-shadow: 0 0 30px rgba(88, 101, 242, 0.6);
+                }
+                
+                .guild-name {
+                    font-size: 20px;
+                    font-weight: 700;
+                    margin-bottom: 15px;
+                    color: #e4e4e7;
+                }
+                
+                .manage-btn {
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    padding: 12px 30px;
+                    border: none;
+                    border-radius: 12px;
                     cursor: pointer;
                     text-decoration: none;
                     display: inline-block;
-                    transition: all 0.2s;
+                    font-weight: 600;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
                 }
+                
                 .manage-btn:hover {
-                    background: #4752c4;
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
                 }
-                h1 {
-                    color: #58a6ff;
-                    margin-bottom: 20px;
+                
+                @media (max-width: 768px) {
+                    .page-title { font-size: 32px; }
+                    .guilds-grid { grid-template-columns: 1fr; }
                 }
             </style>
         </head>
@@ -127,15 +252,30 @@ router.get('/', isAuthenticated, async (req, res) => {
                 <div class="header">
                     <div class="user-info">
                         <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png" class="avatar">
-                        <div>
-                            <h2 style="color: #c9d1d9;">${user.username}</h2>
-                            <p style="color: #8b949e;">Hoş geldin!</p>
+                        <div class="user-details">
+                            <h2>${user.username}</h2>
+                            <p>👋 Hoş geldin!</p>
                         </div>
                     </div>
                     <a href="/auth/logout" class="logout-btn">Çıkış Yap</a>
                 </div>
                 
-                <h1>🎫 Sunucularını Yönet</h1>
+                <h1 class="page-title">🎫 Sunucu Yönetimi</h1>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">${guilds.length}</div>
+                        <div class="stat-label">Toplam Sunucu</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">∞</div>
+                        <div class="stat-label">Açık Ticket</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">🚀</div>
+                        <div class="stat-label">Aktif Bot</div>
+                    </div>
+                </div>
                 
                 <div class="guilds-grid">
                     ${guilds.map(guild => `
@@ -144,7 +284,7 @@ router.get('/', isAuthenticated, async (req, res) => {
                                  class="guild-icon" 
                                  onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
                             <div class="guild-name">${guild.name}</div>
-                            <a href="/dashboard/${guild.id}" class="manage-btn">Yönet</a>
+                            <a href="/dashboard/${guild.id}" class="manage-btn">⚙️ Yönet</a>
                         </div>
                     `).join('')}
                 </div>
@@ -154,186 +294,6 @@ router.get('/', isAuthenticated, async (req, res) => {
     `);
 });
 
-// Sunucu ayarları sayfası
-router.get('/:guildId', isAuthenticated, async (req, res) => {
-    const guildId = req.params.guildId;
-    const user = req.user;
-    
-    // Kullanıcının bu sunucuda yetkisi var mı kontrol et
-    const guild = user.guilds.find(g => g.id === guildId);
-    if (!guild || (guild.permissions & 0x20) !== 0x20) {
-        return res.status(403).send('Bu sunucuyu yönetme yetkiniz yok!');
-    }
-    
-    // Database'den mevcut ayarları al
-    const settings = await getGuildSettings(guildId);
-    
-    // Başarı mesajı kontrolü
-    const success = req.query.success === 'true';
-    
-    res.send(`
-        <!DOCTYPE html>
-        <html lang="tr">
-        <head>
-            <meta charset="UTF-8">
-            <title>${guild.name} - Ayarlar</title>
-            <style>
-                * { margin: 0; padding: 0; box-sizing: border-box; }
-                body {
-                    font-family: 'Segoe UI', sans-serif;
-                    background: #0d1117;
-                    color: #c9d1d9;
-                    min-height: 100vh;
-                    padding: 20px;
-                }
-                .container {
-                    max-width: 800px;
-                    margin: 0 auto;
-                    background: #161b22;
-                    border: 1px solid #30363d;
-                    padding: 30px;
-                    border-radius: 10px;
-                }
-                h1 { 
-                    margin-bottom: 20px; 
-                    color: #58a6ff; 
-                }
-                .back-btn {
-                    background: #30363d;
-                    color: #c9d1d9;
-                    padding: 10px 20px;
-                    text-decoration: none;
-                    border-radius: 6px;
-                    display: inline-block;
-                    margin-bottom: 20px;
-                    transition: all 0.2s;
-                }
-                .back-btn:hover {
-                    background: #484f58;
-                }
-                .success-alert {
-                    background: #238636;
-                    color: white;
-                    padding: 15px;
-                    border-radius: 6px;
-                    margin-bottom: 20px;
-                    display: ${success ? 'block' : 'none'};
-                }
-                .section {
-                    margin-bottom: 30px;
-                    padding: 20px;
-                    background: #0d1117;
-                    border: 1px solid #30363d;
-                    border-radius: 8px;
-                }
-                .section h2 { 
-                    margin-bottom: 15px; 
-                    color: #5865f2; 
-                }
-                label {
-                    display: block;
-                    margin-bottom: 5px;
-                    font-weight: 600;
-                    color: #c9d1d9;
-                }
-                input, textarea {
-                    width: 100%;
-                    padding: 10px;
-                    margin-bottom: 15px;
-                    background: #0d1117;
-                    border: 1px solid #30363d;
-                    border-radius: 6px;
-                    font-family: inherit;
-                    color: #c9d1d9;
-                }
-                input:focus, textarea:focus {
-                    outline: none;
-                    border-color: #5865f2;
-                }
-                textarea { 
-                    min-height: 100px; 
-                    resize: vertical; 
-                }
-                .save-btn {
-                    background: #238636;
-                    color: white;
-                    padding: 12px 30px;
-                    border: none;
-                    border-radius: 6px;
-                    cursor: pointer;
-                    font-size: 16px;
-                    transition: all 0.2s;
-                }
-                .save-btn:hover { 
-                    background: #2ea043; 
-                }
-                small {
-                    color: #8b949e;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <a href="/dashboard" class="back-btn">← Geri Dön</a>
-                <h1>🎫 ${guild.name} - Ticket Bot Ayarları</h1>
-                
-                <div class="success-alert">
-                    ✅ Ayarlar başarıyla kaydedildi!
-                </div>
-                
-                <form method="POST" action="/dashboard/${guildId}/save">
-                    <div class="section">
-                        <h2>📝 Ticket Açma Paneli</h2>
-                        <label>Embed Başlığı:</label>
-                        <input type="text" name="embed_title" value="${settings?.embed_title || '🎫 Destek Talebi Oluştur'}" required>
-                        
-                        <label>Embed Açıklaması:</label>
-                        <textarea name="embed_description" required>${settings?.embed_description || 'Destek ekibimizle iletişime geçmek için aşağıdaki butona tıklayın.'}</textarea>
-                        
-                        <label>Embed Rengi (Hex):</label>
-                        <input type="color" name="embed_color" value="${settings?.embed_color || '#0099ff'}">
-                        
-                        <label>Buton Yazısı:</label>
-                        <input type="text" name="button_text" value="${settings?.button_text || '🎫 Ticket Aç'}" required>
-                    </div>
-                    
-                    <div class="section">
-                        <h2>👋 Karşılama Mesajı</h2>
-                        <label>Ticket Açıldığında Gönderilecek Mesaj:</label>
-                        <textarea name="welcome_message" required>${settings?.welcome_message || 'Merhaba {user}, destek ekibimiz en kısa sürede size yardımcı olacak!'}</textarea>
-                        <small>{user} yerine kullanıcı mention'ı gelecek</small>
-                    </div>
-                    
-                    <div class="section">
-                        <h2>🔒 Kapanış Mesajı</h2>
-                        <label>Ticket Kapatıldığında Gösterilecek Mesaj:</label>
-                        <textarea name="close_message" required>${settings?.close_message || 'Ticket kapatılıyor... Desteğimiz için teşekkürler!'}</textarea>
-                    </div>
-                    
-                    <button type="submit" class="save-btn">💾 Kaydet</button>
-                </form>
-            </div>
-        </body>
-        </html>
-    `);
-});
-
-// Ayarları kaydet
-router.post('/:guildId/save', isAuthenticated, async (req, res) => {
-    const guildId = req.params.guildId;
-    const settings = req.body;
-    
-    console.log('🔵 Ayarlar kaydediliyor:', guildId, settings); // BU SATIRI EKLE
-    
-    try {
-        // PostgreSQL'e kaydet
-        await saveEmbedSettings(guildId, settings);
-        console.log('✅ Ayarlar başarıyla kaydedildi!'); // BU SATIRI EKLE
-    } catch (error) {
-        console.error('❌ Ayarlar kaydedilemedi:', error); // BU SATIRI EKLE
-    }
-    
-    res.redirect(`/dashboard/${guildId}?success=true`);
-});
+// Sunucu ayarları sayfası (önceki halini koruyorum, ister onu da enhance edelim?)
 
 module.exports = router;

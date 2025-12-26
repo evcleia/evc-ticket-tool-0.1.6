@@ -308,8 +308,10 @@ router.get('/', isAuthenticated, async (req, res) => {
                                  class="guild-icon" 
                                  onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
                             <div class="guild-name">${guild.name}</div>
-                            <a href="/dashboard/${guild.id}" class="manage-btn">⚙️ Yönet</a>
-                        </div>
+<div style="display: flex; flex-direction: column; gap: 10px;">
+    <a href="/dashboard/${guild.id}" class="manage-btn">⚙️ Ayarlar</a>
+    <a href="/dashboard/${guild.id}/transcripts" class="manage-btn" style="background: linear-gradient(135deg, #6b46c1 0%, #9333ea 100%);">📄 Transcripts</a>
+</div>                        </div>
                     `).join('')}
                 </div>
             </div>

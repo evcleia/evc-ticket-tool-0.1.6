@@ -272,7 +272,7 @@ router.get('/', isAuthenticated, async (req, res) => {
                         <div class="stat-label">Aktif Ticket</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number">🚀</div>
+                        <div class="stat-number">+</div>
                         <div class="stat-label">Bot Durumu</div>
                     </div>
                 </div>
@@ -537,6 +537,263 @@ router.get('/:guildId', isAuthenticated, async (req, res) => {
                     
                     <button type="submit" class="save-btn">💾 Değişiklikleri Kaydet</button>
                 </form>
+                
+                <div style="margin-top: 30px; text-align: center;">
+                    <a href="/dashboard/${guildId}/transcripts" style="
+                        background: rgba(10, 14, 39, 0.6);
+                        color: #d4af37;
+                        padding: 14px 30px;
+                        text-decoration: none;
+                        border-radius: 12px;
+                        display: inline-block;
+                        border: 1px solid rgba(212, 175, 55, 0.3);
+                        font-weight: 600;
+                        transition: all 0.3s ease;
+                    " onmouseover="this.style.background='rgba(10, 14, 39, 0.8)'" onmouseout="this.style.background='rgba(10, 14, 39, 0.6)'">
+                        📄 Transcript Arşivi
+                    </a>
+                </div>
+            </div>
+        </body>
+        </html>
+    `);
+});
+
+// Transcript arşivi sayfası
+router.get('/:guildId/transcripts', isAuthenticated, async (req, res) => {
+    const fs = require('fs');
+    const path = require('path');
+    const guildId = req.params.guildId;
+    const user = req.user;
+    
+    const guild = user.guilds.find(g => g.id === guildId);
+    if (!guild || (guild.permissions & 0x20) !== 0x20) {
+        return res.status(403).send('Bu sunucuyu yönetme yetkiniz yok!');
+    }
+    
+    // Transcripts klasörünü oku
+    const transcriptsDir = path.join(__dirname, '..', 'transcripts');
+    let transcripts = [];
+    
+    if (fs.existsSync(transcriptsDir)) {
+        const files = fs.readdirSync(transcriptsDir);
+        transcripts = files
+            .filter(file => file.endsWith('.html'))
+            .map(file => {
+                const stats = fs.statSync(path.join(transcriptsDir, file));
+                return {
+                    name: file,
+                    date: stats.mtime,
+                    size: (stats.size / 1024).toFixed(2) + ' KB'
+                };
+            })
+            .sort((a, b) => b.date - a.date);
+    }
+    
+    res.send(`
+        <!DOCTYPE html>
+        <html lang="tr">
+        <head>
+            <meta charset="UTF-8">
+            <title>${guild.name} - Transcript Arşivi</title>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+                
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                
+                body {
+                    font-family: 'Inter', sans-serif;
+                    background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0d1117 100%);
+                    color: #e4e4e7;
+                    min-height: 100vh;
+                    padding: 20px;
+                }
+                
+                .container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    animation: fadeIn 0.5s ease;
+                }
+                
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                
+                .back-btn {
+                    background: rgba(10, 14, 39, 0.6);
+                    color: #d4af37;
+                    padding: 12px 24px;
+                    text-decoration: none;
+                    border-radius: 12px;
+                    display: inline-block;
+                    margin-bottom: 30px;
+                    transition: all 0.3s ease;
+                    border: 1px solid rgba(212, 175, 55, 0.3);
+                }
+                
+                .back-btn:hover {
+                    background: rgba(10, 14, 39, 0.8);
+                    transform: translateX(-5px);
+                }
+                
+                h1 {
+                    font-size: 36px;
+                    font-weight: 800;
+                    background: linear-gradient(135deg, #1e3a8a 0%, #d4af37 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    margin-bottom: 10px;
+                }
+                
+                .subtitle {
+                    color: #a1a1aa;
+                    margin-bottom: 30px;
+                }
+                
+                .stats {
+                    background: rgba(10, 14, 39, 0.6);
+                    backdrop-filter: blur(10px);
+                    padding: 20px;
+                    border-radius: 16px;
+                    border: 1px solid rgba(212, 175, 55, 0.2);
+                    margin-bottom: 30px;
+                    display: flex;
+                    gap: 40px;
+                    flex-wrap: wrap;
+                }
+                
+                .stat-item {
+                    text-align: center;
+                }
+                
+                .stat-number {
+                    font-size: 32px;
+                    font-weight: 800;
+                    background: linear-gradient(135deg, #d4af37 0%, #f4e5a1 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+                
+                .stat-label {
+                    color: #a1a1aa;
+                    font-size: 14px;
+                    margin-top: 5px;
+                }
+                
+                .transcript-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+                    gap: 20px;
+                }
+                
+                .transcript-card {
+                    background: rgba(10, 14, 39, 0.6);
+                    backdrop-filter: blur(20px);
+                    border: 1px solid rgba(212, 175, 55, 0.15);
+                    padding: 25px;
+                    border-radius: 16px;
+                    transition: all 0.3s ease;
+                }
+                
+                .transcript-card:hover {
+                    transform: translateY(-5px);
+                    border-color: rgba(212, 175, 55, 0.4);
+                    box-shadow: 0 8px 25px rgba(30, 58, 138, 0.3);
+                }
+                
+                .transcript-icon {
+                    font-size: 48px;
+                    margin-bottom: 15px;
+                }
+                
+                .transcript-name {
+                    font-size: 16px;
+                    font-weight: 600;
+                    color: #e4e4e7;
+                    margin-bottom: 10px;
+                    word-break: break-word;
+                }
+                
+                .transcript-meta {
+                    display: flex;
+                    gap: 15px;
+                    margin-bottom: 15px;
+                    font-size: 13px;
+                    color: #a1a1aa;
+                }
+                
+                .download-btn {
+                    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+                    color: white;
+                    padding: 10px 20px;
+                    border: 1px solid rgba(212, 175, 55, 0.2);
+                    border-radius: 8px;
+                    text-decoration: none;
+                    display: inline-block;
+                    font-weight: 600;
+                    font-size: 14px;
+                    transition: all 0.3s ease;
+                }
+                
+                .download-btn:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+                }
+                
+                .empty-state {
+                    text-align: center;
+                    padding: 60px 20px;
+                    color: #a1a1aa;
+                }
+                
+                .empty-state-icon {
+                    font-size: 72px;
+                    margin-bottom: 20px;
+                    opacity: 0.5;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <a href="/dashboard/${guildId}" class="back-btn">← Ayarlara Dön</a>
+                
+                <h1>📄 Transcript Arşivi</h1>
+                <p class="subtitle">${guild.name}</p>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-number">${transcripts.length}</div>
+                        <div class="stat-label">Toplam Transcript</div>
+                    </div>
+                </div>
+                
+                ${transcripts.length > 0 ? `
+                    <div class="transcript-grid">
+                        ${transcripts.map(t => `
+                            <div class="transcript-card">
+                                <div class="transcript-icon">📋</div>
+                                <div class="transcript-name">${t.name}</div>
+                                <div class="transcript-meta">
+                                    <span>📅 ${t.date.toLocaleDateString('tr-TR')}</span>
+                                    <span>💾 ${t.size}</span>
+                                </div>
+                                <a href="/transcripts/${t.name}" target="_blank" class="download-btn">
+                                    🔍 Görüntüle
+                                </a>
+                                <a href="/transcripts/${t.name}" download class="download-btn" style="margin-left: 10px;">
+                                    ⬇️ İndir
+                                </a>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <h2>Henüz transcript yok</h2>
+                        <p>Ticket'lar kapandığında burada görünecek</p>
+                    </div>
+                `}
             </div>
         </body>
         </html>

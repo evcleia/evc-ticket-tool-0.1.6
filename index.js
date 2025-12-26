@@ -35,13 +35,14 @@ const { ActivityType } = require('discord.js');
 client.on('ready', () => {
     console.log('Bot çevrimiçi!');
     
-    client.user.setPresence({
-        activities: [{
-            name: 'Deneme',
-            type: ActivityType.Streaming
-        }],
-        status: 'online'
-    });
+client.user.setPresence({
+    activities: [{
+        name: 'Ticket Sistemi',
+        type: ActivityType.Streaming,
+        url: 'https://www.youtube.com/@inankose' // Twitch/YouTube linki gerekli
+    }],
+    status: 'online' // Bunu online bırakabilirsiniz
+});
 });        
     // Database'i başlat
     await initDatabase();

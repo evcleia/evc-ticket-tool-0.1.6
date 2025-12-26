@@ -12,7 +12,7 @@ function isAuthenticated(req, res, next) {
 router.get('/', isAuthenticated, async (req, res) => {
     const user = req.user;
     // Terms of Service Sayfası
-router.get('/terms', (req, res) => {
+router.get('/tos', (req, res) => {
     res.send(`
         <!DOCTYPE html>
         <html lang="tr">
@@ -356,7 +356,7 @@ router.get('/terms', (req, res) => {
                         </div>
                     </div>
                     <div class="header-actions">
-                      <a href="/dashboard/terms" class="tos-btn">📜 Kullanım Koşulları</a>
+                      <a href="/dashboard/tos" class="tos-btn">📜 Kullanım Koşulları</a>
                       <a href="/auth/logout" class="logout-btn">Çıkış Yap</a>
                     </div>                </div>
                 

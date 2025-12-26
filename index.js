@@ -38,10 +38,9 @@ client.on('ready', () => {
 client.user.setPresence({
     activities: [{
         name: 'Ticket Sistemi',
-        type: ActivityType.Streaming,
-        url: 'https://www.youtube.com/@inankose' // Twitch/YouTube linki gerekli
+        type: ActivityType.idle,
     }],
-    status: 'online' // Bunu online bırakabilirsiniz
+    status: 'online' 
 });
 });        
     // Database'i başlat

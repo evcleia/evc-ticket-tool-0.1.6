@@ -323,8 +323,15 @@ router.post('/:guildId/save', isAuthenticated, async (req, res) => {
     const guildId = req.params.guildId;
     const settings = req.body;
     
-    // PostgreSQL'e kaydet
-    await saveEmbedSettings(guildId, settings);
+    console.log('🔵 Ayarlar kaydediliyor:', guildId, settings); // BU SATIRI EKLE
+    
+    try {
+        // PostgreSQL'e kaydet
+        await saveEmbedSettings(guildId, settings);
+        console.log('✅ Ayarlar başarıyla kaydedildi!'); // BU SATIRI EKLE
+    } catch (error) {
+        console.error('❌ Ayarlar kaydedilemedi:', error); // BU SATIRI EKLE
+    }
     
     res.redirect(`/dashboard/${guildId}?success=true`);
 });

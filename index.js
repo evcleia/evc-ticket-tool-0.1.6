@@ -32,10 +32,13 @@ client.once('ready', async () => {
     // Database'i başlat
     await initDatabase();
     
-    // Komutları kaydet
+    // Komutları HER SUNUCUYA kaydet (anında çalışır!)
     const commands = client.commands.map(cmd => cmd.data.toJSON());
-    await client.application.commands.set(commands);
-    console.log('✅ Komutlar kaydedildi!');
+    
+    for (const guild of client.guilds.cache.values()) {
+        await guild.commands.set(commands);
+        console.log(`✅ Komutlar ${guild.name} sunucusuna kaydedildi!`);
+    }
     
     // Web sunucuyu başlat
     require('./server.js');
@@ -481,6 +484,15 @@ async function removeUser(interaction) {
         }
     });
 }
+
+// Bot yeni sunucuya eklendiğinde komutları kaydet
+client.on('guildCreate', async guild => {
+    console.log(`🎉 Yeni sunucuya eklendim: ${guild.name}`);
+    const commands = client.commands.map(cmd => cmd.data.toJSON());
+    await guild.commands.set(commands);
+    console.log(`✅ Komutlar ${guild.name} sunucusuna kaydedildi!`);
+});
+
 
 console.log('TOKEN:', process.env.TOKEN ? 'Var' : 'YOK!');
 client.login(process.env.TOKEN);

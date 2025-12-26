@@ -116,10 +116,14 @@ async function createTicket(interaction) {
         ]
     });
     
+    // Dashboard'dan gelen ayarları kullan
+    const welcomeMessage = settings.welcome_message || 'Merhaba {user}, destek ekibimiz en kısa sürede size yardımcı olacak!';
+    const messageWithUser = welcomeMessage.replace('{user}', `${member}`);
+    
     const embed = new EmbedBuilder()
-        .setColor('#00ff00')
+        .setColor(settings.embed_color || '#00ff00')
         .setTitle('🎫 Ticket Oluşturuldu')
-        .setDescription(`Merhaba ${member}, destek ekibimiz en kısa sürede size yardımcı olacak!`)
+        .setDescription(messageWithUser)
         .setTimestamp();
     
     const closeButton = new ButtonBuilder()

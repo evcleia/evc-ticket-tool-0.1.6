@@ -17,6 +17,12 @@ async function initDatabase() {
                 ticket_count INTEGER DEFAULT 0,
                 log_channel_id VARCHAR(20),
                 category_id VARCHAR(20),
+                embed_title TEXT DEFAULT '🎫 Destek Talebi Oluştur',
+                embed_description TEXT DEFAULT 'Destek ekibimizle iletişime geçmek için aşağıdaki butona tıklayın.',
+                embed_color TEXT DEFAULT '#0099ff',
+                button_text TEXT DEFAULT '🎫 Ticket Aç',
+                welcome_message TEXT DEFAULT 'Merhaba {user}, destek ekibimiz en kısa sürede size yardımcı olacak!',
+                close_message TEXT DEFAULT 'Ticket kapatılıyor... Desteğimiz için teşekkürler!',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         `);
@@ -76,9 +82,37 @@ async function getGuildSettings(guildId) {
     }
 }
 
+// Sunucu embed ayarlarını kaydet
+async function saveEmbedSettings(guildId, settings) {
+    const client = await pool.connect();
+    try {
+        await client.query(`
+            UPDATE guilds 
+            SET embed_title = $1,
+                embed_description = $2,
+                embed_color = $3,
+                button_text = $4,
+                welcome_message = $5,
+                close_message = $6
+            WHERE guild_id = $7
+        `, [
+            settings.embed_title,
+            settings.embed_description,
+            settings.embed_color,
+            settings.button_text,
+            settings.welcome_message,
+            settings.close_message,
+            guildId
+        ]);
+    } finally {
+        client.release();
+    }
+}
+
 module.exports = {
     initDatabase,
     incrementTicketCount,
     saveGuildSettings,
-    getGuildSettings
+    getGuildSettings,
+    saveEmbedSettings
 };

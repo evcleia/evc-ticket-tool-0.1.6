@@ -30,6 +30,9 @@ for (const file of commandFiles) {
 
 client.once('ready', async () => {
     console.log(`✅ Bot hazır! ${client.user.tag} olarak giriş yapıldı`);
+    client.user.setActivity('Ticket sistemini yönetiyor', { 
+        type: 'WATCHING' 
+    });
     
     // Database'i başlat
     await initDatabase();

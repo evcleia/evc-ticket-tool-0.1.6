@@ -30,10 +30,20 @@ for (const file of commandFiles) {
 
 client.once('ready', async () => {
     console.log(`✅ Bot hazır! ${client.user.tag} olarak giriş yapıldı`);
-    client.user.setActivity('Ticket sistemini yönetiyor', { 
-        type: 'WATCHING' 
-    });
+    const durumlar = [
+        { isim: 'Ticket Sistemi', tip: 'PLAYING' },
+        { isim: 'destek taleplerini', tip: 'WATCHING' },
+        { isim: '/yardım', tip: 'LISTENING' }
+    ];
     
+    let i = 0;
+    setInterval(() => {
+        client.user.setActivity(durumlar[i].isim, { 
+            type: durumlar[i].tip 
+        });
+        i = (i + 1) % durumlar.length;
+    }, 10000); // Her 10 saniyede değişir
+        
     // Database'i başlat
     await initDatabase();
     

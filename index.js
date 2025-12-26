@@ -30,20 +30,19 @@ for (const file of commandFiles) {
 
 client.once('ready', async () => {
     console.log(`✅ Bot hazır! ${client.user.tag} olarak giriş yapıldı`);
-    const durumlar = [
-        { isim: 'Ticket Sistemi', tip: 'PLAYING' },
-        { isim: 'destek taleplerini', tip: 'WATCHING' },
-        { isim: '/yardım', tip: 'LISTENING' }
-    ];
+const { ActivityType } = require('discord.js');
+
+client.on('ready', () => {
+    console.log('Bot çevrimiçi!');
     
-    let i = 0;
-    setInterval(() => {
-        client.user.setActivity(durumlar[i].isim, { 
-            type: durumlar[i].tip 
-        });
-        i = (i + 1) % durumlar.length;
-    }, 10000); // Her 10 saniyede değişir
-        
+    client.user.setPresence({
+        activities: [{
+            name: 'Deneme',
+            type: ActivityType.Streaming
+        }],
+        status: 'online'
+    });
+});        
     // Database'i başlat
     await initDatabase();
     

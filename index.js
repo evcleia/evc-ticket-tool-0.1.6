@@ -2,7 +2,7 @@
 const { Client, GatewayIntentBits, Collection, Events, PermissionFlagsBits, ChannelType, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
-
+const { initDatabase, incrementTicketCount, getGuildSettings, saveGuildSettings } = require('./database');
 const ticketDataPath = path.join(__dirname, 'ticketData.json');
 let ticketData = JSON.parse(fs.readFileSync(ticketDataPath, 'utf8'));
 
@@ -28,6 +28,9 @@ for (const file of commandFiles) {
 
 client.once('ready', async () => {
     console.log(`✅ Bot hazır! ${client.user.tag} olarak giriş yapıldı`);
+    
+    // Database'i başlat
+    await initDatabase();
     
     // Komutları kaydet
     const commands = client.commands.map(cmd => cmd.data.toJSON());
@@ -85,11 +88,9 @@ async function createTicket(interaction) {
     }
     
     // Ticket kanalı oluştur
-// Mevcut ticket kanallarını say
-const existingTickets = guild.channels.cache.filter(ch => 
-    ch.name.startsWith('ticket-') && ch.parentId === category.id
-);
-const ticketNumber = String(existingTickets.size + 1).padStart(4, '0');
+// Database'den ticket sayısını al ve artır
+const ticketCount = await incrementTicketCount(guild.id);
+const ticketNumber = String(ticketCount).padStart(4, '0');
 
     const ticketChannel = await guild.channels.create({
         name: `ticket-${ticketNumber}`,

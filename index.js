@@ -75,9 +75,24 @@ async function createTicket(interaction) {
     const guild = interaction.guild;
     const member = interaction.member;
     
-    // Kategori kontrolü
-    let category = guild.channels.cache.get(process.env.TICKET_CATEGORY_ID);
-    
+// Sunucu ayarlarını al
+const settings = await getGuildSettings(guild.id);
+
+if (!settings || !settings.category_id) {
+    return interaction.reply({
+        content: '❌ Ticket sistemi kurulmamış! Yöneticiden `/setup` komutunu çalıştırmasını isteyin.',
+        ephemeral: true
+    });
+}
+
+let category = guild.channels.cache.get(settings.category_id);
+
+if (!category) {
+    return interaction.reply({
+        content: '❌ Kategori bulunamadı! Yönetici `/setup` komutunu tekrar çalıştırmalı.',
+        ephemeral: true
+    });
+}    
     if (!category) {
         category = await guild.channels.create({
             name: '🎫 Tickets',
@@ -341,9 +356,15 @@ async function createTranscript(channel, closedBy) {
         const filePath = path.join(transcriptsDir, fileName);
         fs.writeFileSync(filePath, html);
         
-        // Log kanalına gönder
-        const logChannel = channel.guild.channels.cache.get(process.env.LOG_CHANNEL_ID);
+// Sunucu ayarlarını al
+const settings = await getGuildSettings(channel.guild.id);
 
+if (!settings || !settings.log_channel_id) {
+    console.error('❌ Log kanalı ayarlanmamış!');
+    return;
+}
+
+const logChannel = channel.guild.channels.cache.get(settings.log_channel_id);
         if (logChannel) {
             // Railway URL'ini al
             const serverURL = process.env.RAILWAY_URL || 'https://evc-bot-pbu.up.railway.app';

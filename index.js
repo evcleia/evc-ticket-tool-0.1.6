@@ -85,10 +85,11 @@ async function createTicket(interaction) {
     }
     
     // Ticket kanalı oluştur
-    ticketData.ticketCount++;
-    fs.writeFileSync(ticketDataPath, JSON.stringify(ticketData, null, 2));
-
-    const ticketNumber = String(ticketData.ticketCount).padStart(4, '0');
+// Mevcut ticket kanallarını say
+const existingTickets = guild.channels.cache.filter(ch => 
+    ch.name.startsWith('ticket-') && ch.parentId === category.id
+);
+const ticketNumber = String(existingTickets.size + 1).padStart(4, '0');
 
     const ticketChannel = await guild.channels.create({
         name: `ticket-${ticketNumber}`,

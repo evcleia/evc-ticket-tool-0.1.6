@@ -310,7 +310,7 @@ router.get('/', isAuthenticated, async (req, res) => {
                             <div class="guild-name">${guild.name}</div>
 <div style="display: flex; flex-direction: column; gap: 10px;">
     <a href="/dashboard/${guild.id}" class="manage-btn">⚙️ Ayarlar</a>
-    <a href="/dashboard/${guild.id}/transcripts" class="manage-btn" style="background: linear-gradient(135deg, #6b46c1 0%, #9333ea 100%);">📄 Transcripts</a>
+    <a href="/dashboard/${guild.id}/transcripts" class="manage-btn" style="background: linear-gradient(135deg, #d4af37 0%, #f4e5a1 100%);">📄 Transcript Arşivi</a>
 </div>                        </div>
                     `).join('')}
                 </div>
@@ -809,7 +809,7 @@ router.get('/:guildId/transcripts', isAuthenticated, async (req, res) => {
         </head>
         <body>
             <div class="container">
-                <a href="/dashboard/${guildId}" class="back-btn">← Ayarlara Dön</a>
+                <a href="/dashboard/" class="back-btn">← Dashboard</a>
                 
                 <h1>📄 Transcript Arşivi</h1>
                 <p class="subtitle">${guild.name}</p>

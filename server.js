@@ -78,7 +78,7 @@ app.get('/', (req, res) => {
                 * { margin: 0; padding: 0; box-sizing: border-box; }
                 body {
                     font-family: 'Segoe UI', sans-serif;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    background: linear-gradient(135deg, #101733ff 0%, #615626ff 100%);
                     min-height: 100vh;
                     display: flex;
                     justify-content: center;
@@ -103,7 +103,7 @@ app.get('/', (req, res) => {
                     opacity: 0.9;
                 }
                 .btn {
-                    background: #5865f2;
+                    background: #0d113bff;
                     color: white;
                     padding: 15px 40px;
                     text-decoration: none;
@@ -113,7 +113,7 @@ app.get('/', (req, res) => {
                     transition: all 0.3s;
                 }
                 .btn:hover {
-                    background: #4752c4;
+                    background: #171b46ff;
                     transform: translateY(-2px);
                     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
                 }
@@ -134,8 +134,8 @@ app.get('/', (req, res) => {
         </head>
         <body>
             <div class="container">
-                <h1>🎫 Ticket Bot Dashboard</h1>
-                <p>Sunucularınız için profesyonel ticket sistemi</p>
+                <h1>evc Dashboard Girişi</h1>
+                <p>Roleplay içeriği ve community yönetim paneli</p>
                 
                 ${isLoggedIn ? `
                     <div class="user-info">

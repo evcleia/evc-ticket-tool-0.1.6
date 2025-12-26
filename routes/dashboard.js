@@ -254,7 +254,7 @@ router.get('/', isAuthenticated, async (req, res) => {
                         <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png" class="avatar">
                         <div class="user-details">
                             <h2>${user.username}</h2>
-                            <p>evc Ticket Yönetim Paneli</p>
+                            <p>evc Bot Paneli</p>
                         </div>
                     </div>
                     <a href="/auth/logout" class="logout-btn">Çıkış Yap</a>
@@ -266,6 +266,14 @@ router.get('/', isAuthenticated, async (req, res) => {
                     <div class="stat-card">
                         <div class="stat-number">${guilds.length}</div>
                         <div class="stat-label">Toplam Sunucu</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">∞</div>
+                        <div class="stat-label">Aktif Ticket</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">🚀</div>
+                        <div class="stat-label">Bot Durumu</div>
                     </div>
                 </div>
                 
@@ -518,7 +526,7 @@ router.get('/:guildId', isAuthenticated, async (req, res) => {
                         <h2>👋 Karşılama Mesajı</h2>
                         <label>Ticket Açıldığında Gönderilecek Mesaj:</label>
                         <textarea name="welcome_message" required>${settings?.welcome_message || 'Merhaba {user}, destek ekibimiz en kısa sürede size yardımcı olacak!'}</textarea>
-                        <small>💡 {user} etiketi, doğrudan kullanıcıya mention gönderir.</small>
+                        <small>💡 {user} yerine kullanıcı mention'ı gelecek</small>
                     </div>
                     
                     <div class="section">
@@ -801,7 +809,7 @@ router.post('/:guildId/save', isAuthenticated, async (req, res) => {
     
     try {
         await saveEmbedSettings(guildId, settings);
-        console.log('Ayarlar başarıyla kaydedildi!');
+        console.log('✅ Ayarlar başarıyla kaydedildi!');
     } catch (error) {
         console.error('❌ Ayarlar kaydedilemedi:', error);
     }

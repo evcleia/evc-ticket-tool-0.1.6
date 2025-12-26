@@ -1,10 +1,12 @@
-// require('dotenv').config();
+require('dotenv').config();
+
+// Web sunucuyu ÖNCE başlat
+require('./server.js');
+
 const { Client, GatewayIntentBits, Collection, Events, PermissionFlagsBits, ChannelType, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 const { initDatabase, incrementTicketCount, getGuildSettings, saveGuildSettings } = require('./database');
-const ticketDataPath = path.join(__dirname, 'ticketData.json');
-let ticketData = JSON.parse(fs.readFileSync(ticketDataPath, 'utf8'));
 
 const client = new Client({
     intents: [
@@ -39,9 +41,6 @@ client.once('ready', async () => {
         await guild.commands.set(commands);
         console.log(`✅ Komutlar ${guild.name} sunucusuna kaydedildi!`);
     }
-    
-    // Web sunucuyu başlat
-    require('./server.js');
 });
 
 // Slash komutlarını dinle
@@ -78,37 +77,28 @@ async function createTicket(interaction) {
     const guild = interaction.guild;
     const member = interaction.member;
     
-// Sunucu ayarlarını al
-const settings = await getGuildSettings(guild.id);
+    // Sunucu ayarlarını al
+    const settings = await getGuildSettings(guild.id);
 
-if (!settings || !settings.category_id) {
-    return interaction.reply({
-        content: '❌ Ticket sistemi kurulmamış! Yöneticiden `/setup` komutunu çalıştırmasını isteyin.',
-        ephemeral: true
-    });
-}
-
-let category = guild.channels.cache.get(settings.category_id);
-
-if (!category) {
-    return interaction.reply({
-        content: '❌ Kategori bulunamadı! Yönetici `/setup` komutunu tekrar çalıştırmalı.',
-        ephemeral: true
-    });
-}    
-    if (!category) {
-        category = await guild.channels.create({
-            name: '🎫 Tickets',
-            type: ChannelType.GuildCategory
+    if (!settings || !settings.category_id) {
+        return interaction.reply({
+            content: '❌ Ticket sistemi kurulmamış! Yöneticiden `/setup` komutunu çalıştırmasını isteyin.',
+            ephemeral: true
         });
-        console.log(`✅ Ticket kategorisi oluşturuldu: ${category.id}`);
-        console.log(`⚠️ Bu ID'yi .env dosyasına ekle: TICKET_CATEGORY_ID=${category.id}`);
+    }
+
+    let category = guild.channels.cache.get(settings.category_id);
+
+    if (!category) {
+        return interaction.reply({
+            content: '❌ Kategori bulunamadı! Yönetici `/setup` komutunu tekrar çalıştırmalı.',
+            ephemeral: true
+        });
     }
     
-    // Ticket kanalı oluştur
-// Database'den ticket sayısını al ve artır
-const ticketCount = await incrementTicketCount(guild.id);
-const ticketNumber = String(ticketCount).padStart(4, '0');
+    // Database'den ticket sayısını al ve artır
+    const ticketCount = await incrementTicketCount(guild.id);
+    const ticketNumber = String(ticketCount).padStart(4, '0');
 
     const ticketChannel = await guild.channels.create({
         name: `ticket-${ticketNumber}`,
@@ -359,15 +349,16 @@ async function createTranscript(channel, closedBy) {
         const filePath = path.join(transcriptsDir, fileName);
         fs.writeFileSync(filePath, html);
         
-// Sunucu ayarlarını al
-const settings = await getGuildSettings(channel.guild.id);
+        // Sunucu ayarlarını al
+        const settings = await getGuildSettings(channel.guild.id);
 
-if (!settings || !settings.log_channel_id) {
-    console.error('❌ Log kanalı ayarlanmamış!');
-    return;
-}
+        if (!settings || !settings.log_channel_id) {
+            console.error('❌ Log kanalı ayarlanmamış!');
+            return;
+        }
 
-const logChannel = channel.guild.channels.cache.get(settings.log_channel_id);
+        const logChannel = channel.guild.channels.cache.get(settings.log_channel_id);
+        
         if (logChannel) {
             // Railway URL'ini al
             const serverURL = process.env.RAILWAY_URL || 'https://evc-bot-pbu.up.railway.app';
@@ -492,7 +483,6 @@ client.on('guildCreate', async guild => {
     await guild.commands.set(commands);
     console.log(`✅ Komutlar ${guild.name} sunucusuna kaydedildi!`);
 });
-
 
 console.log('TOKEN:', process.env.TOKEN ? 'Var' : 'YOK!');
 client.login(process.env.TOKEN);

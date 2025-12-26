@@ -75,7 +75,30 @@ router.get('/', isAuthenticated, async (req, res) => {
                     box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
                     transition: transform 0.3s ease;
                 }
-                
+                .header-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.tos-btn {
+    background: rgba(10, 14, 39, 0.6);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: #d4af37;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.tos-btn:hover {
+    background: rgba(10, 14, 39, 0.8);
+    transform: translateY(-2px);
+}
+    ////BURASI ^^^^
                 .avatar:hover {
                     transform: scale(1.1) rotate(5deg);
                 }
@@ -257,8 +280,10 @@ router.get('/', isAuthenticated, async (req, res) => {
                             <p>👋 Hoş geldin!</p>
                         </div>
                     </div>
-                    <a href="/auth/logout" class="logout-btn">Çıkış Yap</a>
-                </div>
+                    <div class="header-actions">
+                      <a href="/dashboard/terms" class="tos-btn">📜 Kullanım Koşulları</a>
+                      <a href="/auth/logout" class="logout-btn">Çıkış Yap</a>
+                    </div>                </div>
                 
                 <h1 class="page-title">🎫 Sunucu Yönetimi</h1>
                 
@@ -842,6 +867,82 @@ router.post('/:guildId/save', isAuthenticated, async (req, res) => {
     }
     
     res.redirect(`/dashboard/${guildId}?success=true`);
+});
+
+// Terms of Service Sayfası
+router.get('/terms', (req, res) => {
+    res.send(`
+        <!DOCTYPE html>
+        <html lang="tr">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Kullanım Koşulları - Ticket Bot</title>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                body {
+                    font-family: 'Inter', sans-serif;
+                    background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0d1117 100%);
+                    color: #e4e4e7;
+                    min-height: 100vh;
+                    padding: 20px;
+                    line-height: 1.8;
+                }
+                .container { max-width: 900px; margin: 0 auto; }
+                .back-btn {
+                    background: rgba(10, 14, 39, 0.6);
+                    color: #d4af37;
+                    padding: 12px 24px;
+                    text-decoration: none;
+                    border-radius: 12px;
+                    display: inline-block;
+                    margin-bottom: 30px;
+                    border: 1px solid rgba(212, 175, 55, 0.3);
+                }
+                .content-box {
+                    background: rgba(10, 14, 39, 0.6);
+                    padding: 40px;
+                    border-radius: 20px;
+                    border: 1px solid rgba(212, 175, 55, 0.2);
+                }
+                h1 {
+                    font-size: 42px;
+                    text-align: center;
+                    background: linear-gradient(135deg, #1e3a8a 0%, #d4af37 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    margin-bottom: 15px;
+                }
+                h2 { color: #d4af37; margin-top: 30px; }
+                p { color: #d4d4d8; margin-bottom: 15px; }
+                ul { margin-left: 25px; }
+                li { color: #d4d4d8; margin-bottom: 10px; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <a href="/dashboard" class="back-btn">← Dashboard'a Dön</a>
+                <div class="content-box">
+                    <h1>📜 Kullanım Koşulları</h1>
+                    <p style="text-align: center; color: #a1a1aa; font-size: 14px; margin-bottom: 40px;">
+                        Son güncelleme: ${new Date().toLocaleDateString('tr-TR')}
+                    </p>
+                    
+                    <!-- BU KISMI İSTEDİĞİNİZ GİBİ DÜZENLEYİN -->
+                    <h2>1. Genel Koşullar</h2>
+                    <p>Buraya kullanım koşullarınızı yazın...</p>
+                    
+                    <h2>2. Gizlilik</h2>
+                    <p>Gizlilik politikanızı buraya yazın...</p>
+                    
+                    <h2>3. İletişim</h2>
+                    <p>Discord: [Linkiniz]<br>E-posta: [E-postanız]</p>
+                </div>
+            </div>
+        </body>
+        </html>
+    `);
 });
 
 module.exports = router;
